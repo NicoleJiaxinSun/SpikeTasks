@@ -3,7 +3,7 @@
 Independent desktop sticky notes that collect on a metallic spike when finished.
 Built with Python and PySide6. No accounts or online services.
 
-![Six-color notes with Chinese and English text](preview.png)
+![Sticky notes placed freely on the macOS desktop](preview.png)
 
 ## Run
 
@@ -49,10 +49,10 @@ Completed papers have roughly 8–12 pixels of separation over the first ten win
 with about 89 pixels of visible stack growth. Larger collections gradually
 compress to stay on the rod; all completed notes remain accessible in Small wins.
 
-![Ten completed papers with visible layer spacing](completed-preview.png)
+![Completed notes collected on the desktop spike](completed-preview.png)
 
-The images show actual offscreen application rendering on a neutral background
-(notes at full opacity in the color preview), not screenshots of a live desktop.
+The images show the application running on a real macOS desktop: active notes
+above, and completed notes collected on the spike below.
 
 ## Saved data
 
