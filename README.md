@@ -1,5 +1,7 @@
 # Spike Notes
 
+English | [简体中文教程](docs/README.zh-CN.md)
+
 Independent desktop sticky notes that collect on a metallic spike when finished.
 Built with Python and PySide6. No accounts or online services.
 
