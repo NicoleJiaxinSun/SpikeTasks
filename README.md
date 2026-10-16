@@ -1,48 +1,86 @@
 # Spike Notes
 
-A quiet, desktop-first task prototype in Python + PySide6. Morandi paper notes fade into the background, become opaque on hover, and collect on a metallic spike when finished. No accounts or online services.
+Independent desktop sticky notes that collect on a metallic spike when finished.
+Built with Python and PySide6. No accounts or online services.
+
+![Six-color notes with Chinese and English text](preview.png)
 
 ## Run
 
-Requires Python 3.10+ and a desktop OS supported by PySide6 (recent macOS, Windows or Linux).
+Requires Python 3.10+ and a desktop operating system supported by PySide6.
 
 ```sh
-cd spike-notes
+git clone https://github.com/NicoleJiaxinSun/SpikeTasks.git
+cd SpikeTasks
 python3 -m venv .venv
 source .venv/bin/activate
-# Windows: .venv\Scripts\activate
 python -m pip install -r requirements.txt
 python main.py
 ```
 
+On Windows, activate with `.venv\Scripts\activate` instead.
+Keep the terminal open while the app runs.
+
 ## Use
 
-- **New note** or **⌘N / Ctrl+N** creates a task. Double-click blank canvas space to place it there.
-- Drag notes to arrange them; hover reveals their full color.
-- Double-click a note to edit its text and color. Right-click to edit or delete.
-- Drag a note's **center near the spike tip**, then release when “RELEASE TO COMPLETE” appears. It snaps toward the tip, dents, tears, tilts into a shallow paper plane, flutters down the rod, and settles above the base. Curved edges, thin paper rims, layered shadows and random rotation give the stack a 2.5D appearance. The rod passes behind the near half of each paper and in front of its far half.
-- Click **Small wins** or the paper stack to read completed notes, restore them, or delete them.
-- **Overlay** enables a translucent, frameless, always-on-top canvas. Drag the empty header to move it; **Esc** returns to the normal window. The × button closes either mode.
+- Drag each independent, transparent note anywhere on your connected screens.
+- Right-click the collector or use the **S** menu-bar/system-tray icon and choose
+  **＋ New note**. This menu also works when right-clicking completed papers.
+- Double-click a note to edit its text and color; right-click it to edit or delete.
+- Drag a note's center to the spike tip, then release to complete it. The paper
+  pierces, tilts, flutters down, and settles onto the stack.
+- Left-click completed papers or choose **Small wins** to restore or delete them.
+- Choose **Keep above other windows** to pin notes. By default other apps can
+  cover them. Choose **Show all notes** to bring hidden notes back.
+- Quit through the collector or tray menu to save and exit.
 
-The overlay is one movable application window: it does not replace the OS desktop or allow clicks through its canvas. Transparency depends on desktop compositing. The standard window is the reliable fallback. Large stacks have a capped visual height; all completed notes remain available in Small wins.
+The collector stays in the bottom-right of the primary screen's available area.
+Its shaped input region leaves the transparent surrounding area available for
+other desktop interaction. This is a desktop app, not a Finder desktop extension.
 
-## Data
+## Appearance
 
-Notes, colors, positions, completion state, stack offset and rotation automatically save to `tasks.json` in Qt's per-user application data folder (`SpikeNotes/Spike Notes`). On macOS this is normally under `~/Library/Application Support/`; on Windows under `%APPDATA%`; on Linux under `~/.local/share/`.
+Six paper colors: rose pink `#F3BCC6`, peach orange `#F6C29A`, cream yellow
+`#F5E69F`, fresh green `#C8EFC1`, mist blue `#B8D8F5`, and soft violet `#D8C5EE`.
+Text uses regular 17-point type. The editing hint appears only on hover.
+Long text wraps within the fixed-size paper; double-click to read/edit full text.
 
-First launch includes three editable demo notes. Deleting all notes keeps the board empty after restarting. Saves replace the previous JSON atomically. If the file is damaged, the original is preserved and saving is disabled until you repair or move it and restart. Avoid running multiple instances against the same data file. Window size and overlay mode are not persisted.
+Completed papers have roughly 8–12 pixels of separation over the first ten wins,
+with about 89 pixels of visible stack growth. Larger collections gradually
+compress to stay on the rod; all completed notes remain accessible in Small wins.
 
-## Files and verification
+![Ten completed papers with visible layer spacing](completed-preview.png)
 
-- `main.py` — launch entry point
-- `spike_notes/app.py` — canvas, note rendering, editing, overlay and animation
-- `spike_notes/storage.py` — validated JSON storage and palette
-- `tests/test_app.py` — interaction, animation and persistence checks
+The images show actual offscreen application rendering on a neutral background
+(notes at full opacity in the color preview), not screenshots of a live desktop.
+
+## Saved data
+
+Notes, colors, positions, and completion state save atomically to `tasks.json` in
+Qt's per-user application data folder (`SpikeNotes/Spike Notes`). On macOS this is
+under `~/Library/Application Support/`; on Windows under `%APPDATA%`; on Linux
+under `~/.local/share/`. Existing eight-color files migrate to the six-color palette.
+
+The first launch includes three demo notes. An intentionally empty board stays
+empty. Invalid files are preserved and saving is disabled until the file is
+repaired or moved. Avoid running multiple instances against the same data file.
+
+## Verification
 
 ```sh
 python -m unittest discover -s tests -v
 ```
 
-Tests use Qt's offscreen platform. Native transparency and the feel of dragging should also be checked on your desktop.
+Seven automated checks cover storage, editing, dragging, completion/restoration,
+independent note scenes, right-click menus, and stack spacing. Tests run offscreen.
+Native transparency, window ordering, input regions, and multiple monitors still
+need desktop testing. The restricted development runner cannot connect to the
+macOS window service; native desktop verification is incomplete.
 
-Qt references: [translucent windows](https://doc.qt.io/qtforpython-6/PySide6/QtWidgets/QWidget.html), [animation framework](https://doc.qt.io/qtforpython-6/overviews/qtcore-animation-overview.html).
+## Source
+
+- `main.py`: launch entry point
+- `spike_notes/app.py`: note rendering, editor, collection animation, retained board view
+- `spike_notes/desktop.py`: desktop note windows, collector, and tray menu
+- `spike_notes/storage.py`: validation, atomic storage, and palette migration
+- `tests/`: offscreen regression checks
